@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STUDENT PERFORMANCE PREDICTION</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+
+        header {
+            background-color: hsl(199, 89%, 61%);
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+        }
+
+        nav {
+            background-color: #fff;
+            border-bottom: 1px solid #ddd;
+            padding: 0.5rem 0;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        nav li {
+            margin: 0 1rem;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #333;
+            font-size: 1rem;
+            font-weight: bold;
+        }
+
+        nav button {
+            background-color: hsl(199, 89%, 61%);
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.2s;
+        }
+
+        nav button:hover {
+            background-color: hsl(199, 89%, 51%);
+            transform: scale(1.05);
+        }
+
+
+        .img {
+            background-image: url("images/sam2.avif");
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: 100% auto;
+            height: 100vh; /* Ensure it takes up space */
+            width: 100%;   /* Make it full-width */
+        }
+
+
+        section.home {
+            display: none; /* Hidden by default */
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .form_container {
+            background: rgba(255, 255, 255, 0.1); /* Transparent effect */
+            backdrop-filter: blur(10px); /* Glass effect */
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h2 {
+            color: #fff;
+            margin-bottom: 1rem;
+        }
+
+        .form_container input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            outline: none;
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+        }
+
+        .form_container input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .form_container button {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background: #007bff;
+            color: #fff;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .form_container button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h3>STUDENT PERFORMANCE PREDICTION</h3>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="index.html" class="nav_link"><h4>Home</h4></a></li>
+            <li><a href="abstract.html" class="nav_link"><h4>Abstract</h4></a></li>
+            <button class="button" onclick="showLoginForm()">Login</button>
+        </ul>
+    </nav>
+    <div class="img">
+
+    
+
+    <section class="home" id="loginSection">
+        <div class="form_container">
+            <div class="form">
+                <h1>Login</h1>
+                <div class="row">
+                    <i class="fas fa-envelope-square"></i>
+                    <input type="text" name="name" placeholder="Enter your name" />
+                </div>
+                <div class="row">
+                    <i class="fas fa-key"></i>
+                    <input type="password" name="pass" placeholder="Enter your password" />
+                </div>
+                <button class="btn" onclick="validateLogin()">Submit</button><br>
+                <button class="close-btn" onclick="hideLoginForm()">Close</button>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        function showLoginForm() {
+            const loginSection = document.getElementById('loginSection');
+            loginSection.style.display = 'flex';
+            const nameInput = loginSection.querySelector('input[name="name"]');
+            nameInput.focus();
+        }
+
+        function hideLoginForm() {
+            const loginSection = document.getElementById('loginSection');
+            loginSection.style.display = 'none';
+        }
+
+        function validateLogin() {
+            const nameInput = document.querySelector('input[name="name"]');
+            const passwordInput = document.querySelector('input[name="pass"]');
+
+            const username = nameInput.value.trim();
+            const password = passwordInput.value.trim();
+
+            if (username === 'kowsi' && password === '2002') {
+                alert('Login successful!');
+                window.location.assign("upload.html")
+                hideLoginForm();
+            } else {
+                alert('Invalid username or password. Please try again.');
+            }
+        }
+
+    </script>
+
+    </div>
+
+</body>
+</html>

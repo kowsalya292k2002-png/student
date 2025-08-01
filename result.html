@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Performance Prediction</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f5f5;
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: #2196F3;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        nav {
+            background: white;
+            padding: 1rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        nav a {
+            margin: 0 15px;
+            text-decoration: none;
+            color: #333;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .form-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        input[type="text"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        button {
+            background: #2196F3;
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            width: 100%;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background: #1976D2;
+        }
+
+        .results {
+            margin-top: 2rem;
+            padding: 2rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .result-card {
+            padding: 2rem;
+            border-radius: 12px;
+            margin: 1rem auto;
+            max-width: 500px;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .pass-result {
+            background-color: #bedaf1;
+            border: 2px solid #4CAF50;
+        }
+
+        .fail-result {
+            background-color: #b5ccde;
+            border: 2px solid #F44336;
+        }
+        
+        .result-image {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 20px auto;
+            display: block;
+        }
+
+        .result-title {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            font-weight: bold;
+        }
+
+        .result-message {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .recommendations {
+            text-align: left;
+            margin-top: 20px;
+            padding: 15px;
+            background-color: rgba(255, 255, 255, 0.5);
+            border-radius: 8px;
+        }
+
+        .chart-container {
+            margin-top: 2rem;
+            height: 400px;
+        }
+
+        .prediction-details {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 4px;
+        }
+
+        .model-prediction {
+            margin: 0.5rem 0;
+            padding: 0.5rem;
+            border-left: 3px solid #2196F3;
+        }
+
+        .confidence-meter {
+            margin: 1rem 0;
+            height: 20px;
+            background: #eee;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .confidence-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #2196F3);
+            transition: width 0.3s ease;
+        }
+
+        .tab-buttons {
+            display: flex;
+            margin-bottom: 1rem;
+        }
+
+        .tab-button {
+            padding: 0.8rem 1.5rem;
+            margin-right: 0.5rem;
+            background: #f0f0f0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            width: auto;
+        }
+
+        .tab-button.active {
+            background: #2196F3;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Student Performance Prediction</h1>
+    </header>
+
+    <nav>
+        <a href="index.html" class="nav_link"><h4>Home</h4></a>
+    </nav>
+
+    <div class="container">
+        <div class="form-container">
+            <form id="predictionForm">
+                <div class="form-group">
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" required />
+                </div>
+                <div class="form-group">
+                    <label for="age">Age:</label>
+                    <input type="text" id="age" name="age" required />
+                </div>
+                <div class="form-group">
+                    <label for="gender">Gender:</label>
+                    <select id="gender" name="gender" required>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="dept">Department:</label>
+                    <select id="dept" name="dept" required>
+                        <option value="computer">COMPUTER SCIENCE</option>
+                        <option value="botany">BOTANY</option>
+                        <option value="chemistry">CHEMISTRY</option>
+                        <option value="economics">ECONOMICS</option>
+                        <option value="statistics">STATISTICS</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="rollno">Roll No:</label>
+                    <input type="text" id="rollno" name="rollno" required />
+                </div>
+                <div class="form-group">
+                    <label for="sub1">Subject 1 Score:</label>
+                    <input type="number" id="sub1" required min="0" max="100">
+                </div>
+                <div class="form-group">
+                    <label for="sub2">Subject 2 Score:</label>
+                    <input type="number" id="sub2" required min="0" max="100">
+                </div>
+                <div class="form-group">
+                    <label for="sub3">Subject 3 Score:</label>
+                    <input type="number" id="sub3" required min="0" max="100">
+                </div>
+                <div class="form-group">
+                    <label for="sub4">Subject 4 Score:</label>
+                    <input type="number" id="sub4" required min="0" max="100">
+                </div>
+                <div class="form-group">
+                    <label for="sub5">Subject 5 Score:</label>
+                    <input type="number" id="sub5" required min="0" max="100">
+                </div>
+                <div class="form-group">
+                    <label for="attendance">Attendance (%):</label>
+                    <input type="number" id="attendance" required min="0" max="100">
+                </div>
+                <div class="form-group">
+                    <label for="studyHours">Study Hours per Day:</label>
+                    <select id="studyHours">
+                        <option value="1">1 Hour</option>
+                        <option value="2">2 Hours</option>
+                        <option value="3">3 Hours</option>
+                        <option value="4">4+ Hours</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="activities">Extracurricular Activities:</label>
+                    <select id="activities">
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
+                    </select>
+                </div>
+                <button type="submit">Predict Performance</button>
+            </form>
+        </div>
+
+        <div class="results" id="results" style="display: none;">
+            <h2>Prediction Results</h2>
+            
+            <div class="tab-buttons">
+                <button id="summaryTab" class="tab-button active">Summary</button>
+                <button id="detailedTab" class="tab-button">Detailed Analysis</button>
+            </div>
+            
+            <!-- Summary View (Pass/Fail Card) -->
+            <div id="summaryContent" class="tab-content active">
+                <div id="singleResultContainer"></div>
+            </div>
+            
+            <!-- Detailed Analysis View -->
+            <div id="detailedContent" class="tab-content">
+                <div class="prediction-details" id="predictionDetails"></div>
+                <div class="confidence-meter">
+                    <div class="confidence-bar" id="confidenceBar"></div>
+                </div>
+                <div class="chart-container" id="predictionChart"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+       // Define generic icons for pass and fail results (using emoji as placeholders)
+const passImage = `<div style="font-size: 80px; line-height: 120px;">🎓</div>`;
+const failImage = `<div style="font-size: 80px; line-height: 120px;">📚</div>`;
+
+// Tab Functionality
+document.getElementById('summaryTab').addEventListener('click', function() {
+    document.getElementById('summaryContent').classList.add('active');
+    document.getElementById('detailedContent').classList.remove('active');
+    document.getElementById('summaryTab').classList.add('active');
+    document.getElementById('detailedTab').classList.remove('active');
+});
+
+document.getElementById('detailedTab').addEventListener('click', function() {
+    document.getElementById('summaryContent').classList.remove('active');
+    document.getElementById('detailedContent').classList.add('active');
+    document.getElementById('summaryTab').classList.remove('active');
+    document.getElementById('detailedTab').classList.add('active');
+});
+
+// Fixed: Corrected the home link issue
+// The ID 'homeLink' doesn't exist in the HTML, it should be referencing the anchor tag in nav
+document.querySelector('nav a').addEventListener('click', function(e) {
+    e.preventDefault();
+    document.getElementById('predictionForm').reset();
+    document.getElementById('results').style.display = 'none';
+});
+
+// Sample training data
+const trainingData = [
+    // Format: [sub1, sub2, sub3, sub4, sub5, attendance, studyHours, activities, outcome]
+    [85, 78, 82, 75, 88, 92, 3, 1, 1], // Pass
+    [45, 52, 48, 50, 55, 65, 1, 0, 0], // Fail
+    [92, 88, 90, 85, 91, 98, 4, 1, 1], // Pass
+    [62, 58, 65, 60, 63, 80, 2, 1, 1], // Pass
+    [35, 42, 38, 40, 41, 55, 1, 0, 0], // Fail
+    [75, 70, 72, 68, 73, 85, 3, 1, 1], // Pass
+    [55, 52, 58, 54, 56, 75, 2, 0, 0], // Fail
+    [82, 78, 80, 76, 82, 90, 3, 1, 1], // Pass
+    [48, 52, 50, 45, 47, 70, 1, 1, 0], // Fail
+    [78, 75, 80, 73, 77, 88, 3, 0, 1], // Pass
+];
+
+// Sample testing data
+const testingData = [
+    // Format: [sub1, sub2, sub3, sub4, sub5, attendance, studyHours, activities, outcome]
+    [80, 75, 78, 72, 82, 90, 3, 1, 1], // Pass
+    [50, 48, 52, 45, 50, 60, 1, 0, 0], // Fail
+    [88, 85, 87, 80, 86, 95, 4, 1, 1], // Pass
+    [40, 45, 42, 38, 45, 50, 1, 0, 0], // Fail
+    [70, 65, 68, 62, 72, 82, 2, 1, 1], // Pass
+];
+
+// ML Models Implementation
+class MLModels {
+    constructor() {
+        this.decisionTree = new DecisionTree();
+        this.randomForest = new RandomForest();
+        this.svm = new SVM();
+        this.neuralNetwork = this.createNeuralNetwork();
+        this.modelTrained = false;
+    }
+
+    createNeuralNetwork() {
+        const model = tf.sequential({
+            layers: [
+                tf.layers.dense({ inputShape: [8], units: 16, activation: 'relu' }),
+                tf.layers.dense({ units: 8, activation: 'relu' }),
+                tf.layers.dense({ units: 1, activation: 'sigmoid' })
+            ]
+        });
+
+        model.compile({
+            optimizer: tf.train.adam(0.001),
+            loss: 'binaryCrossentropy',
+            metrics: ['accuracy']
+        });
+
+        return model;
+    }
+
+    async trainNeuralNetwork() {
+        if (this.modelTrained) return;
+
+        // Prepare training data
+        const trainFeatures = trainingData.map(item => item.slice(0, 8).map(f => f / 100));
+        const trainLabels = trainingData.map(item => item[8]);
+
+        const xs = tf.tensor2d(trainFeatures);
+        const ys = tf.tensor2d(trainLabels, [trainLabels.length, 1]);
+
+        // Train the model
+        await this.neuralNetwork.fit(xs, ys, {
+            epochs: 100,
+            batchSize: 4,
+            shuffle: true,
+            verbose: 0
+        });
+
+        // Train other models
+        this.decisionTree.train(trainingData);
+        this.randomForest.train(trainingData);
+        this.svm.train(trainingData);
+
+        this.modelTrained = true;
+
+        // Clean up tensors
+        xs.dispose();
+        ys.dispose();
+    }
+
+    async predict(features) {
+        if (!this.modelTrained) {
+            await this.trainNeuralNetwork();
+        }
+
+        // Normalize features for neural network
+        const normalizedFeatures = features.map(f => f / 100);
+        
+        // Neural Network prediction
+        const inputTensor = tf.tensor2d([normalizedFeatures]);
+        const nnPrediction = this.neuralNetwork.predict(inputTensor);
+        const nnProbability = await nnPrediction.dataSync()[0];
+        
+        // Decision Tree prediction
+        const dtPrediction = this.decisionTree.predict(features);
+        
+        // Random Forest prediction
+        const rfPrediction = this.randomForest.predict(features);
+        
+        // SVM prediction
+        const svmPrediction = this.svm.predict(features);
+        
+        // Ensemble prediction (average of all models)
+        const ensembleProbability = (nnProbability + dtPrediction + rfPrediction + svmPrediction) / 4;
+        
+        // Clean up tensors
+        inputTensor.dispose();
+        nnPrediction.dispose();
+        
+        return {
+            neuralNetwork: nnProbability,
+            decisionTree: dtPrediction,
+            randomForest: rfPrediction,
+            svm: svmPrediction,
+            ensemble: ensembleProbability,
+            prediction: ensembleProbability >= 0.5 ? 1 : 0
+        };
+    }
+}
+
+// Mock implementation of Decision Tree
+class DecisionTree {
+    constructor() {
+        this.thresholds = [];
+    }
+
+    train(data) {
+        // Simple mock implementation: average thresholds for each feature
+        for (let i = 0; i < 8; i++) {
+            let sum = 0;
+            let count = 0;
+            for (let j = 0; j < data.length; j++) {
+                if (data[j][8] === 1) {
+                    sum += data[j][i];
+                    count++;
+                }
+            }
+            this.thresholds[i] = count > 0 ? sum / count : 0; // Fixed: Added check for division by zero
+        }
+    }
+
+    predict(features) {
+        let score = 0;
+        for (let i = 0; i < features.length; i++) {
+            if (features[i] >= this.thresholds[i]) {
+                score += 1;
+            }
+        }
+        return score / features.length;
+    }
+}
+
+// Mock implementation of Random Forest
+class RandomForest {
+    constructor() {
+        this.trees = [];
+        this.numTrees = 5;
+    }
+
+    train(data) {
+        this.trees = []; // Fixed: Clear existing trees before training
+        for (let i = 0; i < this.numTrees; i++) {
+            const tree = new DecisionTree();
+            // Create a random subset of data for each tree
+            const subset = this.getRandomSubset(data);
+            tree.train(subset);
+            this.trees.push(tree);
+        }
+    }
+
+    getRandomSubset(data) {
+        const subset = [];
+        for (let i = 0; i < data.length; i++) {
+            if (Math.random() > 0.3) {
+                subset.push(data[i]);
+            }
+        }
+        return subset.length > 0 ? subset : [data[0]];
+    }
+
+    predict(features) {
+        let sum = 0;
+        for (let i = 0; i < this.trees.length; i++) {
+            sum += this.trees[i].predict(features);
+        }
+        return sum / this.trees.length;
+    }
+}
+
+// Mock implementation of SVM
+class SVM {
+    constructor() {
+        this.weights = [];
+        this.bias = 0;
+    }
+
+    train(data) {
+        // Very simplified SVM implementation
+        this.weights = new Array(8).fill(0);
+        let passCount = 0;
+        let failCount = 0;
+        
+        // Calculate average values for pass and fail cases
+        let passAvg = new Array(8).fill(0);
+        let failAvg = new Array(8).fill(0);
+        
+        for (let i = 0; i < data.length; i++) {
+            if (data[i][8] === 1) {
+                passCount++;
+                for (let j = 0; j < 8; j++) {
+                    passAvg[j] += data[i][j];
+                }
+            } else {
+                failCount++;
+                for (let j = 0; j < 8; j++) {
+                    failAvg[j] += data[i][j];
+                }
+            }
+        }
+        
+        // Normalize averages
+        for (let j = 0; j < 8; j++) {
+            passAvg[j] = passCount > 0 ? passAvg[j] / passCount : 0; // Fixed: Added check for division by zero
+            failAvg[j] = failCount > 0 ? failAvg[j] / failCount : 0; // Fixed: Added check for division by zero
+            // Set weights based on the difference
+            this.weights[j] = (passAvg[j] - failAvg[j]) / 100;
+        }
+        
+        // Set bias
+        this.bias = -0.5;
+    }
+
+    predict(features) {
+        let sum = this.bias;
+        for (let i = 0; i < features.length; i++) {
+            sum += features[i] * this.weights[i] / 100;
+        }
+        return this.sigmoid(sum);
+    }
+    
+    sigmoid(x) {
+        return 1 / (1 + Math.exp(-x));
+    }
+}
+
+// Initialize ML models
+const mlModels = new MLModels();
+
+// Handle form submission
+document.getElementById('predictionForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    // Get all feature values
+    const features = [
+        parseFloat(document.getElementById('sub1').value),
+        parseFloat(document.getElementById('sub2').value),
+        parseFloat(document.getElementById('sub3').value),
+        parseFloat(document.getElementById('sub4').value),
+        parseFloat(document.getElementById('sub5').value),
+        parseFloat(document.getElementById('attendance').value),
+        parseFloat(document.getElementById('studyHours').value),
+        parseFloat(document.getElementById('activities').value)
+    ];
+    
+    // Get student info
+    const studentName = document.getElementById('name').value;
+    const studentGender = document.getElementById('gender').value;
+    const studentDept = document.getElementById('dept').value;
+    
+    // Make prediction
+    const result = await mlModels.predict(features);
+    
+    // Display results
+    showResults(result, features, studentName);
+});
+
+function showResults(result, features, studentName) {
+    // Show results div
+    document.getElementById('results').style.display = 'block';
+    
+    // Calculate average score
+    const avgScore = (features[0] + features[1] + features[2] + features[3] + features[4]) / 5;
+    
+    // Prepare result card
+    const resultMessage = result.prediction === 1 ? 
+        `${studentName} is predicted to pass with an average score of ${avgScore.toFixed(1)}%.` :
+        `${studentName} may struggle and needs support. Current average: ${avgScore.toFixed(1)}%.`;
+    
+    const resultCard = `
+        <div class="result-card ${result.prediction === 1 ? 'pass-result' : 'fail-result'}">
+            ${result.prediction === 1 ? passImage : failImage}
+            <h3 class="result-title">${result.prediction === 1 ? 'Success Predicted!' : 'At Risk'}</h3>
+            <p class="result-message">${resultMessage}</p>
+            <div class="recommendations">
+                <h4>Recommendations:</h4>
+                <ul>
+                    ${getRecommendations(features, result.prediction)}
+                </ul>
+            </div>
+        </div>
+    `;
+    
+    document.getElementById('singleResultContainer').innerHTML = resultCard;
+    
+    // Update detailed prediction tab
+    updateDetailedPrediction(result, features);
+    
+    // Scroll to results
+    document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+}
+
+function getRecommendations(features, prediction) {
+    const recommendations = [];
+    
+    // General recommendations based on scores
+    const avgScore = (features[0] + features[1] + features[2] + features[3] + features[4]) / 5;
+    
+    if (prediction === 0) {
+        // Recommendations for at-risk students
+        if (avgScore < 60) {
+            recommendations.push('<li>Focus on improving fundamental concepts in all subjects</li>');
+        }
+        
+        if (features[5] < 75) {
+            recommendations.push('<li>Improve attendance to at least 85%</li>');
+        }
+        
+        if (features[6] < 3) {
+            recommendations.push('<li>Increase daily study hours to at least 3 hours</li>');
+        }
+        
+        recommendations.push('<li>Consider joining study groups for peer learning</li>');
+        recommendations.push('<li>Schedule regular meetings with instructors for additional help</li>');
+    } else {
+        // Recommendations for passing students
+        if (avgScore < 80) {
+            recommendations.push('<li>Continue consistent study habits to improve scores further</li>');
+        } else {
+            recommendations.push('<li>Great job! Consider mentoring other students</li>');
+        }
+        
+        if (features[6] >= 3) {
+            recommendations.push('<li>Your study habits are effective - keep it up!</li>');
+        }
+        
+        if (features[7] === 0) {
+            recommendations.push('<li>Consider participating in extracurricular activities for well-rounded development</li>');
+        }
+    }
+    
+    return recommendations.join('');
+}
+
+function updateDetailedPrediction(result, features) {
+    // Update confidence bar
+    const confidenceBar = document.getElementById('confidenceBar');
+    confidenceBar.style.width = `${result.ensemble * 100}%`;
+    
+    // Update prediction details
+    const predictionDetails = document.getElementById('predictionDetails');
+    predictionDetails.innerHTML = `
+        <h3>Model Predictions</h3>
+        <p class="model-prediction">Neural Network: ${(result.neuralNetwork * 100).toFixed(1)}% confidence</p>
+        <p class="model-prediction">Decision Tree: ${(result.decisionTree * 100).toFixed(1)}% confidence</p>
+        <p class="model-prediction">Random Forest: ${(result.randomForest * 100).toFixed(1)}% confidence</p>
+        <p class="model-prediction">SVM: ${(result.svm * 100).toFixed(1)}% confidence</p>
+        <p class="model-prediction"><strong>Ensemble Model: ${(result.ensemble * 100).toFixed(1)}% confidence</strong></p>
+    `;
+    
+    // Create feature importance chart
+    createFeatureImportanceChart(features);
+}
+
+function createFeatureImportanceChart(features) {
+    const featureNames = ['Subject 1', 'Subject 2', 'Subject 3', 'Subject 4', 'Subject 5', 'Attendance', 'Study Hours', 'Activities'];
+    
+    // Normalize feature values for visualization
+    const normalizedFeatures = features.map((f, i) => {
+        // Different normalization for different feature types
+        if (i < 5) return f / 100; // Subject scores
+        else if (i === 5) return f / 100; // Attendance
+        else if (i === 6) return f / 4; // Study hours
+        else return f; // Activities
+    });
+    
+    // Create a bar chart
+    const trace = {
+        x: featureNames,
+        y: normalizedFeatures,
+        type: 'bar',
+        marker: {
+            color: [
+                '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF',
+                '#FF9F40', '#8BC34A', '#607D8B'
+            ]
+        }
+    };
+    
+    const layout = {
+        title: 'Feature Importance',
+        xaxis: { title: 'Features' },
+        yaxis: { title: 'Normalized Value', range: [0, 1] }
+    };
+    
+    Plotly.newPlot('predictionChart', [trace], layout);
+}
+        
+     ;
+    </script>
+</body>
+</html>

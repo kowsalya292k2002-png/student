@@ -1,0 +1,101 @@
+NAME,AGE,GENDER,DEPARTMENT,ROLL NO,SUB 1,SUB 2,SUB 3,SUB 4,SUB 5,ATTENDANCE PERSENTAGE,SPORTS ACTIVITIES
+Adhira,21,female,Computer Science,1001,70,87,85,92,88,92%,yes 
+adhi,22,male,Botany,121,93,87,86,45,96,87%,no
+Meera,21,female,Chemistry,1111,76,77,88,76,80,83%,no
+krishna,22,male,Botany,122,70,63,55,23,78,90%,yes 
+Asha,22,female,Economics,200,85,86,92,88,81,82%,no
+dilip,23,male,Computer Science,1002,57,54,52,67,83,86%,yes 
+Isha,21,female,Chemistry,1112,83,80,78,98,95,93%,no
+Kaviya,23,female,Botany,123,23,58,34,78,34,79%,no
+kumar,24,male,Economics,201,75,73,67,90,82,85%,yes 
+Madhu,22,female,Computer Science,1003,69,23,56,67,80,87%,yes 
+sakthi,21,male,Economics,202,69,69,47,56,86,88%,yes 
+gopi,22,male,Chemistry,1113,50,49,89,79,87,94%,no
+karthick,23,male,Economics,203,74,76,67,93,93,91%,no
+vinoth,22,male,Computer Science,1004,73,70,45,84,95,83%,yes 
+murugan,21,male,Economics,204,54,52,56,76,97,92%,yes 
+pushpa,23,male,Chemistry,1114,46,24,67,92,99,87%,yes 
+Nivetha,21,female,Economics,205,47,41,32,88,95,83%,yes 
+Manju,23,female,Computer Science,1005,92,81,43,59,82,90%,no
+Malathi,22,female,Economics,206,82,85,78,66,72,82%,no
+Bharathi,22,female,Botany,124,71,74,98,91,98,86%,yes 
+raj,23,male,Chemistry,1115,66,62,97,44,95,93%,no
+cecilia,22,female,Economics,207,71,76,67,69,83,79%,yes 
+divya,21,female,Computer Science,1006,23,71,34,70,81,85%,yes 
+ragul,23,male,Economics,208,88,86,79,76,91,87%,no
+venkat,24,male,Botany,125,85,88,69,70,23,88%,no
+ravi,22,male,Chemistry,1117,83,72,94,69,95,94%,yes 
+rishi,21,male,Economics,209,52,51,82,53,87,91%,no
+siva,23,male,Computer Science,1007,66,59,90,60,88,83%,yes 
+Ester,23,female,Statistics,101,79,71,49,49,77,92%,no
+tamizh,22,male,Botany,126,87,86,83,75,75,87%,no
+Gowri,21,female,Chemistry,1118,81,85,77,79,84,83%,yes 
+Kanmani,23,female,Statistics,102,76,79,68,55,81,90%,no
+Lakshmi,24,female,Computer Science,1008,78,75,55,40,75,82%,no
+Nisha,22,female,Statistics,103,35,37,99,99,94,86%,no
+Vishnu,21,male,Statistics,104,82,82,38,78,85,93%,yes 
+Priya,21,female,Botany,127,53,54,60,51,76,79%,yes 
+Priyanka,24,female,Computer Science,1009,74,75,70,91,77,85%,yes 
+Naveen,23,male,Statistics,105,66,72,58,60,88,87%,no
+Siddharth,22,male,Computer Science,1010,85,87,57,75,99,88%,no
+Varun,22,male,Chemistry,1119,85,78,98,84,68,94%,no
+Anand,22,male,Statistics,106,46,48,87,95,48,91%,no
+Mohan,24,male,Botany,128,82,77,76,83,67,83%,no
+Mithran,23,male,Statistics,107,82,72,65,75,87,83%,yes 
+Kartik,21,male,Chemistry,1110,73,67,54,53,67,82%,no
+Ramya,21,female,Computer Science,1011,56,54,43,82,76,84%,no
+Vikram,23,male,Computer Science,1012,71,65,32,66,91,80%,yes 
+Nikhil,23,male,Chemistry,1011,82,90,56,85,90,91%,yes 
+Yuvraj,21,male,Botany,129,23,68,78,12,80,89%,no
+Sandhiya,23,female,Computer Science,1013,52,56,90,98,92,80%,no
+Paul,22,male,Computer Science,1234,73,81,93,97,63,67%,yes 
+Danielle,23,female,Botany,1235,90,82,96,100,90,54%,no
+Tina,21,female,Chemistry,1236,81,24,95,96,65,65%,yes 
+Tara,21,female,Botany,1237,71,84,88,25,89,90%,yes 
+Anthony,23,male,Economics,1238,84,85,65,65,80,68%,yes 
+Kelly,23,female,Computer Science,1239,93,34,67,78,72,56%,no
+Anthony,22,male,Chemistry,1230,99,87,97,73,88,81%,no
+George,20,male,Botany,1212,95,88,82,63,84,82%,no
+Stanley,23,male,Economics,1213,94,89,94,85,81,83%,no
+Audrey,21,female,Computer Science,1214,98,90,88,71,67,84,no
+Gabrielle,22,female,Economics,1215,65,91,97,94,71,85,yes 
+Clinton,22,male,Chemistry,1216,80,92,100,65,87,86,yes 
+Patricia,23,female,Economics,1217,94,93,69,67,89,87,yes 
+Pamela,23,female,Computer Science,1218,66,94,86,100,57,88,no
+Laura,23,female,Economics,1219,96,95,86,92,92,89,yes 
+Roger,23,male,Chemistry,1220,94,96,78,64,79,90,no
+Vicki,22,female,Economics,1221,92,97,13,91,80,91,no
+Maxwell,22,male,Computer Science,1222,86,98,85,79,93,92,no
+Jonathan,21,male,Economics,1223,92,99,92,99,97,93,no
+Angela,21,female,Botany,1224,99,100,98,75,66,94,yes 
+Tim,21,male,Chemistry,1225,100,67,72,98,73,95,yes 
+Kyle,23,male,Economics,1226,57,78,78,14,83,96,yes 
+Shannon,22,female,Computer Science,1227,89,87,68,72,71,97,no
+Sean,21,male,Economics,1228,50,98,81,23,56,98,yes 
+Cassandra,21,female,Botany,1229,87,87,90,88,95,99,yes 
+Patricia,23,female,Chemistry,1230,92,89,87,81,18,100,yes 
+Jason,23,male,Economics,1231,100,95,19,94,63,67,no
+Peter,21,male,Computer Science,1232,64,76,93,79,81,78,no
+Jeffrey,21,male,Statistics,1233,23,90,99,71,76,87,yes 
+Carol,22,female,Botany,1234,82,80,61,97,30,98,yes 
+Angie,22,female,Chemistry,1235,88,53,87,100,88,87,no
+Cynthia,22,female,Statistics,1236,70,60,92,74,82,89,no
+Timothy,21,male,Computer Science,1237,77,89,98,34,85,92,no
+Phyllis,22,female,Statistics,1238,99,99,84,78,78,95,yes 
+Lisa,23,female,Statistics,1239,23,88,91,80,86,87,yes 
+Kelly,23,female,Botany,1240,65,77,78,98,80,82,yes 
+Ryan,22,male,Computer Science,1241,99,56,87,23,89,83,yes 
+Michael,21,male,Statistics,1242,92,45,15,89,81,65,no
+Miguel,20,male,Computer Science,1243,77,78,64,88,94,84,no
+Christopher,20,male,Chemistry,1244,92,90,66,87,60,86,yes 
+Emily,23,female,Statistics,1245,85,25,64,90,23,89,yes 
+Jesus,23,male,Botany,1246,23,78,66,50,88,93,no
+Lauren,21,female,Statistics,1247,93,77,92,77,87,90,yes 
+Pamela,23,female,Chemistry,1248,97,98,85,96,25,80,yes 
+David,22,male,Computer Science,1249,54,96,79,57,53,92,yes 
+Kenneth,21,male,Computer Science,1250,88,99,50,58,84,91,yes 
+Elizabeth,23,female,Chemistry,1251,71,78,93,68,24,93,yes 
+Billy,22,male,Botany,1252,81,67,74,23,97,94,no
+Kimberly,22,female,Computer Science,1253,23,78,86,80,64,83,yes 
+Sonia,21,female,Computer Science,1254,98,97,22,93,94,96,yes 
+madhu,22,female,Statistics,1255,87,78,90,92,56,89,no
